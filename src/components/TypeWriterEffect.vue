@@ -68,7 +68,6 @@ const emit = defineEmits<{
 const typeLine = ref("");
 const isAnimationInProgress = ref(false);
 const animationRepeatCount = ref<number | string>(0);
-const finished = computed(() => typeLine?.value?.length >= props.text?.length);
 
 const computedStyle = {
   backgroundColor: props.highlightColor,
@@ -108,14 +107,9 @@ watch(
   () => isAnimationInProgress.value,
   (newValue) => {
     animationRepeatCount.value = newValue ? "infinite" : 0;
-  }
+    if (!newValue) emit("typeEnded");
+  },
 );
-
-watch(finished, () => {
-  if (finished?.value) {
-    emit("typeEnded");
-  }
-});
 </script>
 
 <style scoped>
